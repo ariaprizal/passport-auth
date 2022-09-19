@@ -1,4 +1,4 @@
-import { destroy, findAllUser } from "../repository/user.repository.mjs";
+import { destroy, findAllUser, update } from "../repository/user.repository.mjs";
 
 
 /**
@@ -21,7 +21,7 @@ async function getAllUser(req, res)
         else
         {
             res.json({
-                "status": 200,
+                "status": 400,
                 "message": `FAILED GET ALL USER BECAUSE USER EMPTY`,
                 "data": null
             });    
@@ -30,7 +30,7 @@ async function getAllUser(req, res)
     catch (error)
     {
         res.json({
-            "status": 200,
+            "status": 400,
             "message": `FAILED GET ALL USER BECAUSE ${error.message}`,
             "data": null
         }); 
@@ -75,6 +75,39 @@ async function deleteById(req, res)
     }
 }
 
+async function updateUserById(req, res)
+{
+    const id = req.params.id;
+    try
+    {
+        const updateUser = await update(req.body, id);
+        if (updateUser !== null)
+        {
+            res.json({
+                "status": 200,
+                "message": `SUCCESFULLY UPDATE THIS USER ID ${id}`,
+                "data": req.body
+            });  
+        }
+        else
+        {
+            res.json({
+                "status": 400,
+                "message": `FAILED UPDATE THIS USER ID ${id}`,
+                "data": null
+            });    
+        }
+    }
+    catch (error)
+    {
+        res.json({
+            "status": 400,
+            "message": `FAILED UPDATE THIS USER ID ${id} BECAUSE ${error.message}`,
+            "data": null
+        }); 
+    }
+}
+
 
 /** export Function */
-export { getAllUser, deleteById };
+export { getAllUser, deleteById, updateUserById };

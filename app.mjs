@@ -5,8 +5,6 @@ import cookieParser from "cookie-parser";
 import createError from "http-errors";
 import cors from "cors";
 import { routeUser } from "./src/routes/route.user.mjs";
-import {  } from "./middleware/passport.mjs";
-import passport from 'passport';
 import { routeAuth } from './src/routes/route.auth.mjs';
 
 
@@ -18,7 +16,7 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
-app.use('/api/user', passport.authenticate('jwt', { session: false }), routeUser);
+app.use('/api/user', routeUser);
 app.use('/api/auth',  routeAuth);
 
 

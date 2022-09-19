@@ -1,5 +1,7 @@
 import {Router} from "express";
-import { createUser, login } from "../controller/auth.controller.mjs";
+import passport from "passport";
+import { checkIsInRole, checkIsInToken } from "../../middleware/passport.mjs";
+import { createUser, login, logout } from "../controller/auth.controller.mjs";
 let routeAuth = Router();
 
 /**
@@ -12,5 +14,10 @@ routeAuth.post('/registrasi', createUser);
  * Route Login 
  */
 routeAuth.post('/login', login);
+
+/**
+ * Route Logout 
+ */
+routeAuth.post('/logout', passport.authenticate('jwt', { session: false }), logout);
 
 export { routeAuth };

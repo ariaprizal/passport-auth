@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { body, validationResult } from "express-validator";
 import { generateAccessToken } from "../../middleware/passport.mjs";
 
+
 /**
  * Login Controller
  * @param {*} req 
@@ -15,7 +16,7 @@ async function login(req, res)
     {
         if (await bcrypt.compare(req.body.password, user.password))
         {
-            const accessToken = generateAccessToken ({user: user.id})
+            const accessToken = generateAccessToken({ user: user.id }, "1d");
             const updateToken = await updateAccessToken({ access_token: accessToken}, user.id);
             if (updateToken.success == true)
             {
@@ -124,6 +125,36 @@ async function createUser(req, res)
     res.json(response);
 }
 
+async function logout(req, res)
+{
+    try
+    {
+        const accessToken = generateAccessToken({ user: req.user.id }, "1s");
+        const updateToken = await updateAccessToken({ access_token: accessToken }, req.user.id);
+        if (updateToken.success == true)
+        {
+                res.json({
+                    "status": 200,
+                    "message": `LOGOUT SUCCESS`,
+                    "access_token": accessToken
+                });                 
+            }
+            else
+            {
+                res.json({
+                    "status": 400,
+                    "message": `FAILED - BECAUSE ${updateToken.message}`
+                }); 
+            }
+    }
+    catch (error)
+    {
+        res.json({
+            "status": 400,
+            "message": `FAILED - BECAUSE ${error.message}`
+        }); 
+    }
+}
 
 // Export Function
-export {login, createUser}
+export {login, createUser, logout}

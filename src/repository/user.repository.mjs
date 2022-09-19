@@ -64,7 +64,7 @@ async function updateAccessToken(data, id)
      try
      {
          const updateUser = await User.update(data, {
-             where : {id: id}
+             where : {id: id}, raw:true
          });
          updateUser[0] !== 0 ? result.success = true : result.success = false;
      }
@@ -98,6 +98,31 @@ async function destroy(id)
 }
 
 /**
+ * Query Update User By Id
+ * @param {*} data 
+ * @param {*} id 
+ * @returns 
+ */
+async function update(data, id) {
+    let result = {
+        "success": false,
+        "message": null,
+    };
+
+    try
+    {
+        const updateWriter = await User.update(data, {
+            where : {id: id}, raw: true
+        });
+        updateWriter[0] !== 0 ? result.success = true : result.success = false;
+    }
+    catch (error)
+    {
+        result.message = error.message;
+    }
+    return result;
+}
+/**
  * Export Function
  */
-export { save, findById, findByUserName, findAllUser, updateAccessToken, destroy };
+export { save, findById, findByUserName, findAllUser, updateAccessToken, destroy, update };
