@@ -7,7 +7,7 @@ let routeUser = Router();
 /**
  * Route Get All user
  */
-routeUser.get('/', passport.authenticate('jwt', { session: false}), checkIsInRole("user"), checkIsInToken(), getAllUser);
+routeUser.get('/', passport.authenticate('jwt', { session: false }), checkIsInToken(), checkIsInRole("user"), getAllUser);
 
 /**
  * Route Delete User By Id

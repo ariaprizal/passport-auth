@@ -42,6 +42,13 @@ async function login(req, res)
             }); 
         }
     }
+    else
+    {
+        res.json({
+            "status": 400,
+            "message": `USERNAME AND PASSWORD NOT MATCH`
+        }); 
+    }
 }
 
 /**
