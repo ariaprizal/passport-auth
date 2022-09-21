@@ -1,0 +1,11 @@
+# environment
+.env
+
+# module depencies
+node_modules/
+
+# .lock
+*.lock
+
+#vscode
+.vscode

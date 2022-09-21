@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import {db} from "../../models/index.mjs";
 import { restore, stub } from "sinon";
-import { destroy, findAllUser, findByUserName, update, updateAccessToken } from "../repository/user.repository.mjs";
+import { findByUserName, updateAccessToken } from "../repository/user.repository.mjs";
 import { describe } from "mocha";
 import { } from "chai-http";
 const User = db.User;
