@@ -22,6 +22,29 @@ async function (jwtPayload, done) {
 }
 ));
 
+const auth = (req, res, next) => {
+let responseObj = {
+    statusCode: 0, 
+    message: "",
+    data: {}
+}
+passport.authenticate('jwt', (err, user, info) => {
+  let token = req.headers.authorization; 
+  if (err) { 
+      return next(err);
+  }
+  
+  if (!user || token.replace('Bearer ', '') !== user.access_token) {
+       responseObj.statusCode = 401 
+       responseObj.message = `UNAUTHORIZED - ${info !== undefined ? info.message : ""}`
+       return res.status(responseObj.statusCode).json(responseObj)
+  }
+  
+  req.user = user;
+  next();
+})(req, res, next);
+}
+
 /**
  * Cek Role user
  * @param {*} roles 
@@ -47,31 +70,6 @@ const checkIsInRole = (roles) => (req, res, next) => {
 }
 
 /**
- * Cek Role user
- * @param {*} roles 
- * @returns 
- */
-const checkIsInToken = () => (req, res, next) => {
-  let token = req.headers.authorization;
-  if (!req.user) {
-    return res.json({"message" : "USER NOT FOUND FROM THE MIDDLEWARE"})
-  }
-  if (token.replace('Bearer ', '') === req.user.access_token) {
-    return next()    
-  }
-  else
-  {
-    res.json({
-      "status": 400,
-      "message": `UNAUTHORIZED OR EXPIRED TOKEN`,
-      "data": null
-  }); 
-  }
-
-}
-
-
-/**
  * Gneerate Token When Login
  * @param {*} user 
  * @returns 
@@ -84,4 +82,4 @@ function generateAccessToken(user, expiresIn)
 
 
 // export Function
-export { generateAccessToken, checkIsInRole, checkIsInToken }
+export { generateAccessToken, checkIsInRole, auth }

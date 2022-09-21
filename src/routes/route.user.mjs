@@ -1,22 +1,21 @@
 import { Router } from "express";
-import passport from 'passport';
-import { checkIsInRole, checkIsInToken } from "../../middleware/passport.mjs";
+import { auth, checkIsInRole } from "../../middleware/passport.mjs";
 import { deleteById, getAllUser, updateUserById } from "../controller/user.controller.mjs";
 let routeUser = Router();
 
 /**
  * Route Get All user
  */
-routeUser.get('/', passport.authenticate('jwt', { session: false }), checkIsInToken(), checkIsInRole("user"), getAllUser);
+routeUser.get('/', auth, checkIsInRole("user"), getAllUser);
 
 /**
  * Route Delete User By Id
  */
-routeUser.delete('/:id', passport.authenticate('jwt', { session: false }), checkIsInRole("admin"), checkIsInToken(), deleteById);
+routeUser.delete('/:id', auth, checkIsInRole("admin"), deleteById);
 
 /**
  * Route Update User By Id
  */
-routeUser.put('/:id', passport.authenticate('jwt', { session: false }), checkIsInRole("admin"), checkIsInToken(), updateUserById);
+routeUser.put('/:id', auth, checkIsInRole("admin"), updateUserById);
 
 export { routeUser };
